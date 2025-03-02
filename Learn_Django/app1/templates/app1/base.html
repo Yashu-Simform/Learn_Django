@@ -1,0 +1,31 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Homepage {% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'app1/styles/index.css' %}">
+    {% block styles %}{% endblock styles %}
+</head>
+<body>
+    <header>
+        <h1>{% block header %}Welcome to Home Page{% endblock header %}</h1>
+    </header>
+    <nav>
+        <a href="http://127.0.0.1:8000/">Home</a>
+        <a href="http://127.0.0.1:8000/about">About</a>
+        <a href="http://127.0.0.1:8000/service">Services</a>
+        <a href="http://127.0.0.1:8000/contact">Contact</a>
+    </nav>
+    <main>
+        {% block content %}
+        <h2>Introduction</h2>
+        <p>This is a simple homepage example. You can customize it to suit your needs.</p>
+        {% endblock content %}
+    </main>
+    <footer>
+        <p>&copy; 2025 My Website. All rights reserved.</p>
+    </footer>
+</body>
+</html>
