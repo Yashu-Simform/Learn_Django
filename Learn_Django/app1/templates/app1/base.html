@@ -15,10 +15,10 @@
         <h1 class='bg-orange-400'>{% block header %}Welcome to Home Page{% endblock header %}</h1>
     </header>
     <nav>
-        <a href="http://127.0.0.1:8000/">Home</a>
-        <a href="http://127.0.0.1:8000/about">About</a>
-        <a href="http://127.0.0.1:8000/service">Services</a>
-        <a href="http://127.0.0.1:8000/contact">Contact</a>
+        <a href="{% url "home" %}">Home</a>
+        <a href="{% url "about" %}">About</a>
+        <a href="{% url "service" %}">Services</a>
+        <a href="{% url "contact" %}">Contact</a>
     </nav>
     <main>
         {% block content %}
