@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile</title>
+    <link rel="stylesheet" href="{% static "student/styles/styles.css" %}">
+</head>
+<body>
+    <h1>Student Data</h1>
+    {% if students %}
+    {% for student in students %}
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <td>{{ student.name }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ student.email }}</td>
+        </tr>
+        <tr>
+            <th>City</th>
+            <td>{{ student.city }}</td>
+        </tr>
+        <tr>
+            <th>Roll No</th>
+            <td>{{ student.roll_no }}</td>
+        </tr>
+    </table>
+    {% endfor %}
+    {% else %}
+    <p>No Data</p>
+    {% endif %}
+</body>
+</html>
