@@ -7,3 +7,16 @@ class Profile(models.Model):
     email = models.EmailField(max_length=255, default='example@gmail.com', unique=True)
     city = models.CharField(max_length=70, default='Junagadh')
     roll_no = models.IntegerField(default = 0, unique=True)
+    stu_class = models.IntegerField(default=1, choices=[(1, '1'),(2, '2'),(3, '3'),(4, '4'),(5, '5'),(6, '6'),(7, '7'),(8, '8'),(9, '9'),(10, '10'),(11, '11'),(12, '12')])
+
+    def __str__(self):
+        return self.name
+    
+
+class Result(models.Model):
+    stu_roll_no = models.IntegerField(default = 0, unique=True)
+    stu_class = models.IntegerField(default=1, choices=[(1, '1'),(2, '2'),(3, '3'),(4, '4'),(5, '5'),(6, '6'),(7, '7'),(8, '8'),(9, '9'),(10, '10'),(11, '11'),(12, '12')])
+    marks = models.IntegerField(default = 0)
+
+    def __str__(self):
+        return str(self.stu_roll_no)

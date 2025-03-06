@@ -1,0 +1,84 @@
+/* Styling for labels */
+form label {
+  display: block;
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 5px;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+}
+
+/* Add focus styling when input fields are active */
+form input[name="email"]:focus + label,
+form input[name="password"]:focus + label {
+  color: #007bff; /* Change label color to match the focused field */
+  font-weight: bold;
+}
+
+/* General styling for the form */
+form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
+}
+
+/* Styling for input fields */
+form input[name="email"],
+form input[name="password"] {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Add focus effect on input fields */
+form input[name="email"]:focus,
+form input[name="password"]:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
+/* Submit button styling */
+form input[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for submit button */
+form input[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive form adjustments */
+@media (max-width: 480px) {
+  form {
+    padding: 15px;
+  }
+  form label {
+    font-size: 14px;
+  }
+  form h1 {
+    font-size: 22px;
+  }
+  form input[name="email"],
+  form input[name="password"],
+  form input[type="submit"] {
+    font-size: 14px;
+  }
+}
