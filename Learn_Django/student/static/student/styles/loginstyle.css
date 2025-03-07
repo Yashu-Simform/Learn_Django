@@ -1,5 +1,5 @@
-/* Styling for labels */
-form label {
+/* Styling for labels within the custom form */
+.custom-form label {
   display: block;
   font-size: 16px;
   color: #555;
@@ -8,15 +8,15 @@ form label {
   font-weight: bold;
 }
 
-/* Add focus styling when input fields are active */
-form input[name="email"]:focus + label,
-form input[name="password"]:focus + label {
+/* Add focus styling when input fields are active in the custom form */
+.custom-form input[name="email"]:focus + label,
+.custom-form input[name="password"]:focus + label {
   color: #007bff; /* Change label color to match the focused field */
   font-weight: bold;
 }
 
-/* General styling for the form */
-form {
+/* General styling for the custom form */
+.custom-form {
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
@@ -26,9 +26,9 @@ form {
   font-family: Arial, sans-serif;
 }
 
-/* Styling for input fields */
-form input[name="email"],
-form input[name="password"] {
+/* Styling for input fields in the custom form */
+.custom-form input[name="email"],
+.custom-form input[name="password"] {
   width: 100%;
   padding: 12px;
   margin-bottom: 15px;
@@ -39,16 +39,16 @@ form input[name="password"] {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Add focus effect on input fields */
-form input[name="email"]:focus,
-form input[name="password"]:focus {
+/* Add focus effect on input fields in the custom form */
+.custom-form input[name="email"]:focus,
+.custom-form input[name="password"]:focus {
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
   outline: none;
 }
 
-/* Submit button styling */
-form input[type="submit"] {
+/* Submit button styling in the custom form */
+.custom-form input[type="submit"] {
   width: 100%;
   padding: 12px;
   background-color: #007bff;
@@ -60,25 +60,25 @@ form input[type="submit"] {
   transition: background-color 0.3s ease;
 }
 
-/* Hover effect for submit button */
-form input[type="submit"]:hover {
+/* Hover effect for the submit button in the custom form */
+.custom-form input[type="submit"]:hover {
   background-color: #0056b3;
 }
 
 /* Responsive form adjustments */
 @media (max-width: 480px) {
-  form {
+  .custom-form {
     padding: 15px;
   }
-  form label {
+  .custom-form label {
     font-size: 14px;
   }
-  form h1 {
+  .custom-form h1 {
     font-size: 22px;
   }
-  form input[name="email"],
-  form input[name="password"],
-  form input[type="submit"] {
+  .custom-form input[name="email"],
+  .custom-form input[name="password"],
+  .custom-form input[type="submit"] {
     font-size: 14px;
   }
 }

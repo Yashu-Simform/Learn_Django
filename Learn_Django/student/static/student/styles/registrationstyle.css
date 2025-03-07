@@ -1,44 +1,41 @@
-/* General body styling */
-*{
-    box-sizing: border-box;
+/* Scoped Custom Form Styles */
+.custom-form * {
+    box-sizing: border-box; /* Scoped box-sizing to custom form elements */
 }
 
-body {
+.custom-form {
     font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f3f3f3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    background-color: #fff;
 }
 
 /* Form container */
-form {
+.custom-form form {
     background: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
+    /* width: 100%; */
     max-width: 400px;
+    margin: 0 auto; /* Center form */
 }
 
 /* Headings */
-h1, h2 {
+.custom-form h1, .custom-form h2 {
     text-align: center;
     color: #333;
 }
 
-/* Labels and inputs styling */
-label {
+/* Labels and input fields styling */
+.custom-form label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
     color: #444;
 }
 
-input, select, button {
+.custom-form input,
+.custom-form select,
+.custom-form button {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -47,39 +44,40 @@ input, select, button {
     font-size: 16px;
 }
 
-input:focus, select:focus {
+.custom-form input:focus,
+.custom-form select:focus {
     border-color: #007bff;
     outline: none;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 /* Submit button styling */
-button, input[type="submit"] {
+.custom-form button, .custom-form input[type="submit"] {
     background-color: #007bff;
     color: #fff;
     border: none;
     cursor: pointer;
 }
 
-button:hover, input[type="submit"]:hover {
+.custom-form button:hover, .custom-form input[type="submit"]:hover {
     background-color: #0056b3;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    body {
+    .custom-form {
         padding: 10px;
     }
 
-    form {
+    .custom-form form {
         padding: 15px;
     }
 
-    h1, h2 {
+    .custom-form h1, .custom-form h2 {
         font-size: 20px;
     }
 
-    input, select, button {
+    .custom-form input, .custom-form select, .custom-form button {
         font-size: 14px;
     }
 }

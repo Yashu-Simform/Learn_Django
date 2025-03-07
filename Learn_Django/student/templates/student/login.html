@@ -1,27 +1,26 @@
+{% extends "student/base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log In</title>
-    <link rel="stylesheet" href="{% static "student/styles/loginstyle.css" %}">
-</head>
-<body>
-    <form action="">
-        <h1>Log In</h1>
-        {{form_obj}}
-        {% comment %} <label for="{{form_obj.email.id_for_label}}">{{form_obj.email.label}} (Manually added)</label>
-        <input type="{{form_obj.email.field.widget.input_type}}" id="{{form_obj.email.id_for_label}}" name="{{form_obj.email.name}}"> {% endcomment %}
-        
-        {% comment %} <div>
-            Showing form object attributes: <br>
-            Label text: {{form_obj.email.id_for_label}}<br>
-            Name of an element: {{form_obj.email.name}}<br>
-            HTML name: {{form_obj.email.html_name}}<br>
-            Check if field is required: {{form_obj.email.field.required}}
-        </div> {% endcomment %}
-        <input type="submit">
-    </form>
-</body>
-</html>
+{% block addstyle %}
+<link rel="stylesheet" href="{% static "student/styles/loginstyle.css" %}">
+{% endblock addstyle %}
+{% block title %}Log In{% endblock title %}
+{% block addon %}
+<div class="custom-form">
+<form action="" method="POST" novalidate>
+    {% csrf_token %}
+    <h1>Log In</h1>
+    {{form_obj}}
+    {% comment %} <label for="{{form_obj.email.id_for_label}}">{{form_obj.email.label}} (Manually added)</label>
+    <input type="{{form_obj.email.field.widget.input_type}}" id="{{form_obj.email.id_for_label}}" name="{{form_obj.email.name}}"> {% endcomment %}
+    
+    {% comment %} <div>
+        Showing form object attributes: <br>
+        Label text: {{form_obj.email.id_for_label}}<br>
+        Name of an element: {{form_obj.email.name}}<br>
+        HTML name: {{form_obj.email.html_name}}<br>
+        Check if field is required: {{form_obj.email.field.required}}
+    </div> {% endcomment %}
+    <input type="submit" value="Log In">
+</form>
+</div>
+{% endblock addon %}

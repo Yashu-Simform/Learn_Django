@@ -5,7 +5,8 @@ from django.db import models
 class Profile(models.Model):
     name = models.CharField(max_length=70)
     email = models.EmailField(max_length=255, default='example@gmail.com', unique=True)
-    city = models.CharField(max_length=70, default='Junagadh')
+    password = models.CharField(max_length=50, verbose_name='password', null=False, blank=False, default='iron@man-power+')
+    city = models.CharField(max_length=70, default='junagadh')
     roll_no = models.IntegerField(default = 0, unique=True)
     stu_class = models.IntegerField(default=1, choices=[(1, '1'),(2, '2'),(3, '3'),(4, '4'),(5, '5'),(6, '6'),(7, '7'),(8, '8'),(9, '9'),(10, '10'),(11, '11'),(12, '12')])
 
