@@ -19,8 +19,15 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'view_all_students' %}">Home</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'student_registration' %}">Register Student</a>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Register Student
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="{% url 'student_registration' %}">Single Student</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'add_stu_from_json' %}">Upload JSON file</a></li>
+                </ul>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'student_login' %}">Student Login</a>
@@ -36,6 +43,7 @@
     <div class='addon' style="margin-top:10px; background-color: #fff;">
       {% block addon %}{% endblock addon %}
     </div>
+    {% block afterjs %}{% endblock afterjs %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

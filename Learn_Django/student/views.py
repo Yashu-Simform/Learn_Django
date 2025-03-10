@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from student.models import Profile
-from student.myforms import Registration, LogIn
-import copy
+from student.myforms import Registration, LogIn, RegistrationFile
+import json
 
 # Create your views here.
 def student_data(request):
@@ -13,16 +13,9 @@ def student_registration(request):
     if request.method == 'POST':
         data = Registration(request.POST)
         if data.is_valid():
-            last_record = Profile.objects.all().order_by('roll_no').last()
-            last_roll_no = 0
-            if (last_record != None) and (last_record != 0):
-                last_roll_no = last_record.roll_no
-            print(last_roll_no)
-            my_cleaned_data = copy.deepcopy(data.cleaned_data)
-            my_cleaned_data.update({'roll_no': (last_roll_no + 1)})
-            print(my_cleaned_data)
-            stu = Profile(**my_cleaned_data)
-            stu.save()
+
+            add_stu_to_db(data.cleaned_data)
+
             return HttpResponseRedirect('/student/register/success')
         else:
             print('Invalid data!')
@@ -50,6 +43,8 @@ def student_login(req):
         obj = LogIn(auto_id='iska_id_%s')
     return render(req, 'student/login.html', {'form_obj': obj})
 
+
+#View All students
 def view_all_students(req):
     all_students = Profile.objects.all()
     context = {
@@ -57,6 +52,8 @@ def view_all_students(req):
     }
     return render(req, 'student/all_students.html', context)
 
+
+#Update student record
 def update_student(req, stu_id):
     if req.method == 'GET':
         print('Its GET method')
@@ -85,8 +82,44 @@ def update_student(req, stu_id):
 
     return HttpResponse('Updated')
 
+
+#Delete a student record
 def delete_student(req, stu_id):
     stu = Profile(id=stu_id)
     deleted_data = stu.delete()
     print(deleted_data)
-    return HttpResponseRedirect('/student/all')
+    return HttpResponseRedirect('/student/all') 
+
+# Add students from JSON file
+def add_stu_from_json(req):
+    if req.method == 'POST':
+        data = RegistrationFile(req.POST, req.FILES)
+        if data.is_valid():
+            uploaded_file = data.cleaned_data['data_file']
+            if uploaded_file:
+                print(uploaded_file.name)
+
+                students_data = json.load(uploaded_file)
+                print(students_data)
+
+                for stu_data in students_data:
+                    add_stu_to_db(stu_data)
+
+        else:
+            print('Invalid Data!')
+    # print('Students data from file saved to db!')
+    else:
+        data = RegistrationFile()
+
+    return render(req, 'student/data_file_upload.html', {'form_obj': data})
+
+# Save a single stu record to db
+def add_stu_to_db(data):
+    last_record = Profile.objects.all().order_by('roll_no').last()
+    last_roll_no = 0
+    if (last_record != None) and (last_record != 0):
+        last_roll_no = last_record.roll_no
+    print(last_roll_no)
+    data.update({'roll_no': (last_roll_no + 1)})
+    stu = Profile(**data)
+    stu.save(commit=False)
