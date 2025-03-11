@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from student.models import Profile
 from student.myforms import Registration, LogIn, RegistrationFile
 import json
+from django.contrib import messages
 
 # Create your views here.
 def student_data(request):
@@ -13,9 +14,12 @@ def student_registration(request):
     if request.method == 'POST':
         data = Registration(request.POST)
         if data.is_valid():
-
-            add_stu_to_db(data.cleaned_data)
-
+            try:
+                messages.info(request, f"Student with data : \n{data.cleaned_data} \nis being registered...")
+                add_stu_to_db(data.cleaned_data)
+                messages.success(request, "Student Registered Successfully!")
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, f"There is an error {e}")
             return HttpResponseRedirect('/student/register/success')
         else:
             print('Invalid data!')
@@ -47,9 +51,15 @@ def student_login(req):
 #View All students
 def view_all_students(req):
     all_students = Profile.objects.all()
+    # messages.success(req, "Got the students data from db.")
+
     context = {
-        'profiles': all_students
+        'profiles': all_students,
+        'messages': messages.get_messages(req)
     }
+
+    messages.add_message(req, messages.SUCCESS, "Got the students data from db.")
+    # messages.add_message(req, messages.ERROR, "Got some error while fetching student data.")
     return render(req, 'student/all_students.html', context)
 
 
@@ -74,8 +84,13 @@ def update_student(req, stu_id):
         data = Registration(req.POST)
         if data.is_valid():
             print(data.cleaned_data)
-            updated_stu = Profile(id=stu_id ,**data.cleaned_data)
-            updated_stu.save()
+            try:
+                updated_stu = Profile(id=stu_id ,**data.cleaned_data)
+                updated_stu.save()
+                messages.success(req, f"Student with name: {data.cleaned_data.get('name')} is added to db.")
+            except Exception as e:
+                messages.error(req, f"Got an error for student with email: {data.cleaned_data.get('email')} \nerror: {e}")
+                pass
             return HttpResponseRedirect('/student/all')
         else:
             print('Invalid data!')
@@ -85,9 +100,13 @@ def update_student(req, stu_id):
 
 #Delete a student record
 def delete_student(req, stu_id):
-    stu = Profile(id=stu_id)
-    deleted_data = stu.delete()
-    print(deleted_data)
+    try:
+        stu = Profile(id=stu_id)
+        deleted_data = stu.delete()
+        print(deleted_data)
+        messages.success(req, "Student deleted successfully!")
+    except Exception as e:
+        messages.error(req, f"Got some error: {e}")
     return HttpResponseRedirect('/student/all') 
 
 # Add students from JSON file
@@ -103,7 +122,11 @@ def add_stu_from_json(req):
                 print(students_data)
 
                 for stu_data in students_data:
-                    add_stu_to_db(stu_data)
+                    try:
+                        add_stu_to_db(stu_data)
+                        messages.success(req, f"Student with name: {stu_data.get('name')} is added to db.")
+                    except Exception as e:
+                        messages.error(req, f"Got an error for student with email: {stu_data.get('email')} \nerror: {e}")
 
         else:
             print('Invalid Data!')
@@ -122,4 +145,4 @@ def add_stu_to_db(data):
     print(last_roll_no)
     data.update({'roll_no': (last_roll_no + 1)})
     stu = Profile(**data)
-    stu.save(commit=False)
+    stu.save()

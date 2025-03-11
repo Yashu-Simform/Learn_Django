@@ -5,7 +5,8 @@
 {% endblock addstyle %}
 {% block title %}{% endblock title %}
 {% block addon %}
-
+{% comment %} <div id="data-container" style="display:hidden" data="{% block export_data %}form_data{% endbloc export_datak  %}|escapejs"></div> {% endcomment %}
+{% comment %} {% block export_data %}{{messages}}{% endblock export_data %} {% endcomment %}
 <div class="custom-form">
     <form class="myform" method="post" novalidate>
         {% csrf_token %}
