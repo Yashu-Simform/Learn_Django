@@ -1,0 +1,5 @@
+{% extends "teacher/base.html" %}
+
+{% block addon %}
+<iframe src="{% url "get_courses" 1 %}" frameborder="0"></iframe>
+{% endblock addon %}
