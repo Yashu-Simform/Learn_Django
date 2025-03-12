@@ -11,4 +11,5 @@ urlpatterns = [
     path('delete/<int:stu_id>', delete_student, name='delete_student'),
     path('update/<int:stu_id>', update_student, name='update_student'),
     path('jsonfile/', add_stu_from_json, name='add_stu_from_json'),
+    path('getstudents/<int:p_stu_class>', api_get_students, name='api_get_students'),
 ]

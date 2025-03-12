@@ -13,6 +13,14 @@ class Profile(models.Model):
     def __str__(self):
         return self.name
     
+    def toJSON(self):
+        return {'name': self.name, 
+               'email': self.email,
+               'password': self.password,
+               'city': self.city,
+               'roll_no': self.roll_no,
+               'stu_class': self.stu_class}
+    
 
 class Result(models.Model):
     stu_roll_no = models.IntegerField(default = 0, unique=True)

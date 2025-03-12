@@ -1,5 +1,77 @@
 {% extends "teacher/base.html" %}
 
+{% load static %}
+{% block addstyle %}
+<link rel="stylesheet" href="{% static 'student/styles/all_students.css' %}">
+{% endblock addstyle %}
+
 {% block addon %}
-<iframe src="{% url "get_courses" 1 %}" frameborder="0"></iframe>
+{% comment %} <iframe src="{% url "get_courses" 1 %}" frameborder="0"></iframe> {% endcomment %}
+<div style="display:flex; flex-direction: row;padding: 0 20px;">
+<div title="Students" style="display:flex; flex-direction: column; justify-content: left; align-items: center">
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          Student Class
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item" href="#">1</a></li>
+          <li><a class="dropdown-item" href="#">2</a></li>
+          <li><a class="dropdown-item" href="#">3</a></li>
+          <li><a class="dropdown-item" href="#">4</a></li>
+          <li><a class="dropdown-item" href="#">5</a></li>
+          <li><a class="dropdown-item" href="#">6</a></li>
+          <li><a class="dropdown-item" href="#">7</a></li>
+          <li><a class="dropdown-item" href="#">8</a></li>
+          <li><a class="dropdown-item" href="#">9</a></li>
+          <li><a class="dropdown-item" href="#">10</a></li>
+          <li><a class="dropdown-item" href="#">11</a></li>
+          <li><a class="dropdown-item" href="#">12</a></li>
+        </ul>
+      </div>
+      <div style="margin-bottom:10px"></div>
+      <table>
+        <thead>
+            <tr>
+                {% comment %} <th>ID</th> {% endcomment %}
+                <th>Roll No</th>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stu in students %}
+            <tr>
+                {% comment %} <td>{{ profile.id }}</td> {% endcomment %}
+                <td>{{ stu.roll_no }}</td>
+                <td>{{ stu.name }}</td>
+                <td>{{ stu.email }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+  <div class="container" title="Courses" style="max-width:500px">
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          Student Class
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item" href="#">1</a></li>
+          <li><a class="dropdown-item" href="#">2</a></li>
+          <li><a class="dropdown-item" href="#">3</a></li>
+          <li><a class="dropdown-item" href="#">4</a></li>
+          <li><a class="dropdown-item" href="#">5</a></li>
+          <li><a class="dropdown-item" href="#">6</a></li>
+          <li><a class="dropdown-item" href="#">7</a></li>
+          <li><a class="dropdown-item" href="#">8</a></li>
+          <li><a class="dropdown-item" href="#">9</a></li>
+          <li><a class="dropdown-item" href="#">10</a></li>
+          <li><a class="dropdown-item" href="#">11</a></li>
+          <li><a class="dropdown-item" href="#">12</a></li>
+        </ul>
+      </div>
+      <div style="margin-bottom:10px"></div>
+      {{courses | safe}}
+  </div>
+</div>
 {% endblock addon %}

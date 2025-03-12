@@ -1,0 +1,20 @@
+<table>
+    <thead>
+        <tr>
+            {% comment %} <th>ID</th> {% endcomment %}
+            <th>Roll No</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for stu in students %}
+        <tr>
+            {% comment %} <td>{{ profile.id }}</td> {% endcomment %}
+            <td>{{ students[stu].roll_no }}</td>
+            <td>{{ students[stu].name }}</td>
+            <td>{{ students[stu].email }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

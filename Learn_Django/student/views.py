@@ -3,6 +3,8 @@ from student.models import Profile
 from student.myforms import Registration, LogIn, RegistrationFile
 import json
 from django.contrib import messages
+from .db_operations import add_stu_to_db, delete_stu_db, get_students
+from django.http import JsonResponse
 
 # Create your views here.
 def student_data(request):
@@ -27,7 +29,6 @@ def student_registration(request):
         print('Request method is not POST')
         data = Registration()
     return render(request, 'student/registration.html', {'form_obj': data})
-
 
 def student_registration_success(req):
     return render(req, 'student/register_success.html')
@@ -101,9 +102,7 @@ def update_student(req, stu_id):
 #Delete a student record
 def delete_student(req, stu_id):
     try:
-        stu = Profile(id=stu_id)
-        deleted_data = stu.delete()
-        print(deleted_data)
+        delete_stu_db(stu_id)
         messages.success(req, "Student deleted successfully!")
     except Exception as e:
         messages.error(req, f"Got some error: {e}")
@@ -136,13 +135,7 @@ def add_stu_from_json(req):
 
     return render(req, 'student/data_file_upload.html', {'form_obj': data})
 
-# Save a single stu record to db
-def add_stu_to_db(data):
-    last_record = Profile.objects.all().order_by('roll_no').last()
-    last_roll_no = 0
-    if (last_record != None) and (last_record != 0):
-        last_roll_no = last_record.roll_no
-    print(last_roll_no)
-    data.update({'roll_no': (last_roll_no + 1)})
-    stu = Profile(**data)
-    stu.save()
+# API's
+def api_get_students(req, p_stu_class):
+    students = get_students(p_stu_class)
+    return JsonResponse(students)

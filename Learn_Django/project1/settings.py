@@ -69,6 +69,8 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 NPM_BIN_PATH = '/usr/local/node/bin/npm'
 
 MIDDLEWARE = [
