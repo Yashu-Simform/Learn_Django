@@ -21,3 +21,6 @@ def getTime(request):
 
 def helloBoloHello(request):
     return HttpResponse('<h1>Hello!</h1>')
+
+def login_options(req):
+    return render(req, 'app1/login.html')

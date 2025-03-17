@@ -7,5 +7,6 @@ urlpatterns = [
     path('service/', service, name="service"),
     path('contact/', contact, name="contact"),
     path('time/', getTime, name='time'),
-    path('greet/', helloBoloHello, name='greet')
+    path('greet/', helloBoloHello, name='greet'),
+    path('login/', login_options, name='login'),
 ]

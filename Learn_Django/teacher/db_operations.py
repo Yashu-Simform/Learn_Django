@@ -1,5 +1,14 @@
 from .models import TeacherProfile
+def saveUser(func):
+    from django.contrib.auth.models import User
+    def wrapper(p_body):
+        user = User.objects.create(email=p_body['email'], password=p_body['password'])
+        user.save()
+        func(p_body)
 
+    return wrapper
+
+@saveUser
 def add_teacher_db(data = None):
     if data:
         try:
