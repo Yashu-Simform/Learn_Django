@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect,HttpRequest
 from django.shortcuts import render
 from django.urls import reverse
 import requests
@@ -15,18 +15,24 @@ from django.contrib import messages
 #     return render(req, 'teacher/teacher_home.html')
 
 def teacher_home(req):
+    if 'loggedin' in req.session and req.session['loggedin'] == True:
+        print('Ha bhai to achuka he pehle!')
+    else:
+        return HttpResponseRedirect(reverse('login'))
     base_url = 'http://127.0.0.1:8000/'
-    l_url = f'{base_url}course/getcourses/1'
+    l_url = f'{base_url}course/getcourses/2'
     stu_url = f'{base_url}student/getstudents/5'
     response = requests.get(l_url)
     courses = response.text
+    print(courses)
 
     get_stus = requests.get(stu_url)
     print(str(get_stus.text))
     json_data = json.loads(str(get_stus.text))
     students = [stu for stu in json_data.values()]
     print(students)
-    return render(req, 'teacher/teacher_home.html', {'courses': courses, 'students': students})
+    context = {'courses': courses, 'students': students, 'loggedin': req.session['loggedin']}
+    return render(req, 'teacher/teacher_home.html', context)
 
 
 def register_teacher(req):
@@ -56,7 +62,8 @@ def login_teacher(req):
             print(user)
             if len(user) > 0:
                 login(req, user[0])
-                return HttpResponseRedirect(reverse('home'))
+                req.session['loggedin'] = True
+                return HttpResponseRedirect(reverse('teacher_home'))
             else:
                 print('No such user exists!')
                 messages.add_message(req, messages.ERROR, 'No such user exists!')
@@ -65,3 +72,16 @@ def login_teacher(req):
         response = TeacherLogin()
     
     return render(req, 'teacher/login.html', {'form_obj': response})
+
+
+def logout_teacher(req):
+    if not req.session['loggedin']:
+        print('Sale logout to he!')
+    
+    try:
+        del req.session['loggedin']
+        return HttpResponseRedirect(reverse('project_home'))
+    except Exception as e:
+        print(f'Error while logging out: {e}')
+
+    return HttpResponseRedirect(reverse('teacher_home')) 
