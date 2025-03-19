@@ -82,8 +82,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "django_browser_reload.middleware.BrowserReloadMiddleware",
-    'middlewares.teacher.AuthCheck',
-    'middlewares.teacher.TokenCheck',
+    # 'core.middlewares.teacher.ExceptionDisplayer',
+    # 'core.middlewares.teacher.BeforeView',
+    # 'core.middlewares.teacher.ManageTemplate',
+    'core.middlewares.teacher.AuthCheck',
+    # 'middlewares.teacher.AuthCheck',
+    # 'middlewares.teacher.TokenCheck',
 ]
 
 ROOT_URLCONF = 'project1.urls'

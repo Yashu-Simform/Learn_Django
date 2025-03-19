@@ -4,7 +4,7 @@ from django.urls import reverse
 import requests
 import json
 from .myforms import TeacherRegistration, TeacherLogin
-from .db_operations import add_teacher_db
+from .db_operations import *
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from .models import TeacherProfile
@@ -18,6 +18,7 @@ def teacher_home(req):
     if 'loggedin' in req.session and req.session['loggedin'] == True:
         print('Ha bhai to achuka he pehle!')
     else:
+        print('Redirect kar raha hu!')
         return HttpResponseRedirect(reverse('login'))
     base_url = 'http://127.0.0.1:8000/'
     l_url = f'{base_url}course/getcourses/2'
@@ -79,9 +80,19 @@ def logout_teacher(req):
         print('Sale logout to he!')
     
     try:
-        del req.session['loggedin']
+        # del req.session['loggedin']
+        req.session.flush()
         return HttpResponseRedirect(reverse('project_home'))
     except Exception as e:
         print(f'Error while logging out: {e}')
 
     return HttpResponseRedirect(reverse('teacher_home')) 
+
+
+def delete_teacher(req, tid):
+    try:
+        delete_teacher_db(tid)
+        return HttpResponse('Teacher Deleted Successfully!')
+    except Exception as e:
+        print(e)
+        return HttpResponse(f'{e}')

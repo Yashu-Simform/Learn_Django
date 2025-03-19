@@ -33,3 +33,15 @@ def teacher_id_generator():
         new_id = 'T' + str(int(last_id[1:]) + 1)
     print(new_id)
     return new_id
+
+# Delete a teacher
+def delete_teacher_db(tid):
+    try:
+        teacher = TeacherProfile.objects.get(teacher_id = tid)
+        deleted_data = teacher.delete()
+        print('Deleted data: {deleted_data}')
+    except Exception as e:
+        if not TeacherProfile.objects.filter(teacher_id = tid):
+            raise Exception('Teacher with specified id does not exists in db.')
+        else:
+            raise Exception(f'Error occur while deleting teacher: {e}')
