@@ -1,0 +1,30 @@
+{% extends "student/base.html" %}
+{% load static %}
+{% block addstyle %}
+<link rel="stylesheet" href="{% static 'student/styles/registrationstyle.css' %}">
+{% endblock addstyle %}
+
+{% block addon %}
+<div class="custom-form">
+<form class="myform" method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+{% comment %} <div class="mb-3">
+    <label for="formFile" class="form-label">Register students using JSON file</label>
+    <input class="form-control" type="file" id="formFile">
+</div> {% endcomment %}
+{% for field in form_obj  %}
+<div>
+    {% block content %}
+        {{ field.label_tag }} {{ field }}
+        {% if field.errors %}
+            <div style="color: red;">
+                {{ field.errors }}
+            </div>
+        {% endif %}
+    {% endblock content %}
+</div>
+{% endfor %}
+<input type="submit" value="{% block submitBtn %}Submit{% endblock submitBtn %}">
+</form>
+</div>
+{% endblock addon %}

@@ -51,15 +51,26 @@ INSTALLED_APPS = [
     'tailwind',
     'theme',
     'django_browser_reload',
+    'crispy_forms',
+    "crispy_bootstrap5",
     'app1',
-    'student'
+    'teacher',
+    'student',
+    'course',
+    'notifications',
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 TAILWIND_APP_NAME = 'theme'
 
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 NPM_BIN_PATH = '/usr/local/node/bin/npm'
 
@@ -72,6 +83,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "django_browser_reload.middleware.BrowserReloadMiddleware",
+    # 'core.middlewares.teacher.ExceptionDisplayer',
+    # 'core.middlewares.teacher.BeforeView',
+    # 'core.middlewares.teacher.ManageTemplate',
+    'core.middlewares.teacher.AuthCheck',
+    # 'middlewares.teacher.AuthCheck',
+    # 'middlewares.teacher.TokenCheck',
 ]
 
 ROOT_URLCONF = 'project1.urls'
@@ -100,9 +117,13 @@ WSGI_APPLICATION = 'project1.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "djangodb",
+        "USER": "y",
+        "PASSWORD": "ypass",
+        "HOST": "127.0.0.1",
+        "PORT": "",
     }
 }
 
@@ -136,6 +157,10 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+MEDIA_URL = "media/"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Static files (CSS, JavaScript, Images)

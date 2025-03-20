@@ -1,6 +1,7 @@
 from django import forms
 from django.core import validators
 import os
+import json
 
 class Registration(forms.Form):
     name = forms.CharField(
@@ -23,8 +24,6 @@ class Registration(forms.Form):
         error_messages={'required': 'city to dal pehle!'}
     )
 
-    data_file = forms.FileField()
-
     stu_class = forms.ChoiceField(choices=[(1, '1'),(2, '2'),(3, '3'),(4, '4'),(5, '5'),(6, '6'),(7, '7'),(8, '8'),(9, '9'),(10, '10'),(11, '11'),(12, '12')])
 
 
@@ -46,17 +45,8 @@ class Registration(forms.Form):
             raise forms.ValidationError('InValid password!, Password must contain at least 1 special character.')
 
         return cleaned_password
+
     
-    def clean_data_file(self):
-        cleaned_data_file = self.cleaned_data.get('data_file')
-
-        if not cleaned_data_file:
-            raise forms.ValidationError('Select a valid file!')
-
-        extension = os.path.splitext(cleaned_data_file.name)[-1].tolower()
-
-        if extension != '.json':
-            raise forms.ValidationError('Not a json file')
     #   Custom Validation for whole form
     # def clean(self):
     #     cleaned_data = super().clean()
@@ -105,3 +95,24 @@ class LogIn(forms.Form):
 
         return cleaned_password
         
+
+
+
+class RegistrationFile(forms.Form):
+    data_file = forms.FileField()
+
+    def clean_data_file(self):
+        cleaned_data_file = self.cleaned_data.get('data_file')
+        print(cleaned_data_file)
+
+        if not cleaned_data_file:
+            print('Not a file')
+            raise forms.ValidationError('Select a valid file!')
+
+        extension = os.path.splitext(cleaned_data_file.name)[-1].lower()
+
+        if extension != '.json':
+            print('not json file')
+            raise forms.ValidationError('Not a json file')
+        
+        return cleaned_data_file
