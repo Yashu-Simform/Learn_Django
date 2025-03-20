@@ -5,6 +5,7 @@ import json
 from django.contrib import messages
 from .db_operations import add_stu_to_db, delete_stu_db, get_students
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def student_data(request):

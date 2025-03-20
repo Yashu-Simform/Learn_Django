@@ -20,9 +20,16 @@ class AuthCheck(MiddlewareMixin):
     
     def process_request(self, req):
         allowed_urls = ['/login/', '/register/']
+        apps_to_check = ['/teacher/']
+
         print('Hi by old style')
+
+        #condition to check if user want to go for login or register
         if not (True in [req.path.endswith(url) for url in allowed_urls]):
-            if req.path.startswith('/teacher/'):
+
+            #condition to check if middleware should apply to this app or not
+            if (True in [req.path.startswith(app_url) for app_url in apps_to_check]):    
+
                 if (not ('loggedin' in req.session)) or (req.session['loggedin'] == 'False'):
                     #Not have loggedin yet - redirect it to login page
                     print('Redirecting to login page ...')
