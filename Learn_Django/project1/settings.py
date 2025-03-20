@@ -11,16 +11,16 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import environ
+# import environ
 import os
 
 # Initialize environment variables
-env = environ.Env()
-environ.Env.read_env(env_file='./.env')
+# env = environ.Env()
+# environ.Env.read_env(env_file='./.env')
 
-# Load the base URL and port from the .env file
-BASE_URL = env('BASE_URL')
-PORT = env('PORT')
+# # Load the base URL and port from the .env file
+# BASE_URL = env('BASE_URL')
+# PORT = env('PORT')
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -87,7 +87,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'context_processors.global_settings',
+                # 'context_processors.global_settings',
             ],
         },
     },
