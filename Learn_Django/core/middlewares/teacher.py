@@ -49,6 +49,16 @@ class TokenCheck:
 
         return response
     
+def TokenCheckMiddleware(view_function):
+    def wrapper(req):
+        print('Playing before the view')
+        response = view_function(req)
+        print('Playing after the view')
+
+        return response
+
+    return wrapper
+    
 class BeforeView:
     def __init__(self, response):
         self.response = response

@@ -2,7 +2,8 @@ from django.db import models
 
 # Create your models here.
 
-class Profile(models.Model):
+class StudentProfile(models.Model):
+    student_id = models.CharField(verbose_name='student_id', max_length=100, null=False, unique=True, primary_key=True)
     name = models.CharField(max_length=70)
     email = models.EmailField(max_length=255, default='example@gmail.com', unique=True)
     password = models.CharField(max_length=50, verbose_name='password', null=False, blank=False, default='iron@man-power+')

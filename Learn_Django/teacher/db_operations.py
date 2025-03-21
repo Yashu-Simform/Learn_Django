@@ -45,3 +45,16 @@ def delete_teacher_db(tid):
             raise Exception('Teacher with specified id does not exists in db.')
         else:
             raise Exception(f'Error occur while deleting teacher: {e}')
+        
+
+# Get user id
+def get_userid(p_email):
+    try:
+        auser = list(TeacherProfile.objects.filter(email = p_email))
+        if len(auser) == 0:
+            print('No user exists with given email address!')
+            raise Exception('No user exists with given email address!')
+        else:
+            return str(auser[0].teacher_id)
+    except Exception as e:
+        raise e

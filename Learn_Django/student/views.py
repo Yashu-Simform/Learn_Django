@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse
-from student.models import Profile
+from student.models import StudentProfile
 from student.myforms import Registration, LogIn, RegistrationFile
 import json
 from django.contrib import messages
@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def student_data(request):
-    students = Profile.objects.all()
+    students = StudentProfile.objects.all()
     return render(request, 'student/profile.html', {'students': students})
 
 # Student Registration
@@ -52,7 +52,7 @@ def student_login(req):
 
 #View All students
 def view_all_students(req):
-    all_students = Profile.objects.all()
+    all_students = StudentProfile.objects.all()
     # messages.success(req, "Got the students data from db.")
 
     context = {
@@ -69,7 +69,7 @@ def view_all_students(req):
 def update_student(req, stu_id):
     if req.method == 'GET':
         print('Its GET method')
-        stu = Profile.objects.get(id=stu_id)
+        stu = StudentProfile.objects.get(id=stu_id)
         existing_data = {
             'name': stu.name,
             'email': stu.email,
@@ -87,7 +87,7 @@ def update_student(req, stu_id):
         if data.is_valid():
             print(data.cleaned_data)
             try:
-                updated_stu = Profile(id=stu_id ,**data.cleaned_data)
+                updated_stu = StudentProfile(id=stu_id ,**data.cleaned_data)
                 updated_stu.save()
                 messages.success(req, f"Student with name: {data.cleaned_data.get('name')} is added to db.")
             except Exception as e:

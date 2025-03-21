@@ -63,7 +63,10 @@ def login_teacher(req):
             print(user)
             if len(user) > 0:
                 login(req, user[0])
-                req.session['loggedin'] = True
+
+                #Managing session
+                req.session['loggedin'] = True  # mark user logged in
+                req.session['userid'] = get_userid(str(response.cleaned_data['email'])) # store user id
                 return HttpResponseRedirect(reverse('teacher_home'))
             else:
                 print('No such user exists!')

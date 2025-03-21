@@ -14,11 +14,13 @@ authbtn.addEventListener('click', function () {
         console.log(xhttp.response)
     }else{
         // User has not logged in
+        console.log('Moving to login page')
+        window.location.href = 'http://127.0.0.1:8000/login/'
     }
 })
 
 notifybtn.addEventListener('click', function(){
-    
+    console.log(document.cookie)
 
     const panel = document.getElementById("notificationPanel");
     
@@ -26,11 +28,6 @@ notifybtn.addEventListener('click', function(){
         console.log('Getting notifications.')
         // Getting all notifications
         const url = "http://127.0.0.1:8000/notifications/getnotifications/student/1"
-        // const xhttp = new XMLHttpRequest()
-        // xhttp.open("GET", url)
-        // xhttp.send()
-        // response = xhttp.responseText
-        // console.log(response)
 
         fetch(url)
         .then(response => response.json())

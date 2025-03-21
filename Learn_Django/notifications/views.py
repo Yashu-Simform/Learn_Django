@@ -3,9 +3,11 @@ from django.http import HttpResponse, JsonResponse
 from .db_operations import *
 from django.middleware.csrf import get_token
 
-# Create your views here.
-def get_notifications(req, p_user_class, p_user_id):
+# Get user's notification
+def get_notifications(req):
     try:
+        p_user_id = get_userid_from_session(req)
+        p_user_class = get_user_class(p_user_id)
         allNotifications = get_notifications_db(p_user_class, p_user_id)
         print(allNotifications)
         return JsonResponse(allNotifications, safe=False)
@@ -14,6 +16,7 @@ def get_notifications(req, p_user_class, p_user_id):
 
     return HttpResponse('All notifications are received!')
 
+# Add notification
 def add_notification(req):
     if req.method == 'POST':
         try:
@@ -29,7 +32,20 @@ def add_notification(req):
     
     return HttpResponse('Please make a post request!')
 
-
+#Return the csrf token for any post request want to make
 def my_get_csrf_token(req):
     csrf_token = get_token(req)
     return JsonResponse({'csrf_token': csrf_token})
+
+# Extract user id from current session
+def get_userid_from_session(req):
+    if 'userid' in req.session:
+        return req.session['userid']
+    return None
+
+# Extract user class from provided user id
+def get_user_class(p_user_id):
+    if p_user_id[0] == 'T':
+        return 'teacher'
+    elif p_user_id[0] == 'S':
+        return 'student'

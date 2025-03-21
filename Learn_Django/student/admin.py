@@ -1,5 +1,5 @@
 from django.contrib import admin
-from student.models import Profile, Result
+from student.models import StudentProfile, Result
 
 # Register your models here.
 
@@ -7,7 +7,7 @@ from student.models import Profile, Result
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('name', 'roll_no', 'email')
 
-admin.site.register(Profile, ProfileAdmin)
+admin.site.register(StudentProfile, ProfileAdmin)
 
 #Another way to register model for our admin dashboard
 @admin.register(Result)

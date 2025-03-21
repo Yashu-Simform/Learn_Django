@@ -66,13 +66,26 @@
               </div>
           </div> {% endcomment %}
 
-            <button id='authbtn' type="button" class="btn btn-primary">
-              {% if loggedin %}
-                Logout
-              {% else %}
-                Login
-              {% endif %}
-            </button>
+            <div class="dropdown">
+              <a class="btn white dropdown-toggle text-dark" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                {% if loggedin %}
+                    Logout
+                  {% else %}
+                    Login
+                  {% endif %}
+              </a>
+            
+              <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="dropdownMenuLink">
+                <li><a id="anotherAcc" class="dropdown-item" href="#">Sign in with another account</a></li>
+                <li><button id='authbtn' type="button" class="dropdown-item">
+                  {% if loggedin %}
+                    Logout
+                  {% else %}
+                    Login
+                  {% endif %}
+                </button></li>
+              </ul>
+            </div>
           </div>
         </div>
     </nav>
