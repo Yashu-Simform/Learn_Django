@@ -1,6 +1,7 @@
 from django import forms
 from django.core import validators
 import os
+from django.contrib.auth.models import User
 import json
 
 class Registration(forms.Form):
@@ -24,7 +25,7 @@ class Registration(forms.Form):
         error_messages={'required': 'city to dal pehle!'}
     )
 
-    stu_class = forms.ChoiceField(choices=[(1, '1'),(2, '2'),(3, '3'),(4, '4'),(5, '5'),(6, '6'),(7, '7'),(8, '8'),(9, '9'),(10, '10'),(11, '11'),(12, '12')])
+    student_class = forms.ChoiceField(choices=[(1, '1'),(2, '2'),(3, '3'),(4, '4'),(5, '5'),(6, '6'),(7, '7'),(8, '8'),(9, '9'),(10, '10'),(11, '11'),(12, '12')])
 
 
     def clean_password(self):
@@ -63,6 +64,7 @@ class Registration(forms.Form):
     #     return cleaned_data
 
 class LogIn(forms.Form):
+
     email = forms.EmailField(
         widget=forms.EmailInput(
             attrs={'placeholder':'Pehchan bata apni...'}

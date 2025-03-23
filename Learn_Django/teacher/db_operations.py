@@ -1,22 +1,32 @@
 from .models import TeacherProfile
 from django.contrib.auth.hashers import make_password
+from django.db.transaction import atomic
 
 def saveUser(func):
     from django.contrib.auth.models import User
     def wrapper(p_body):
-        user = User.objects.create(email=p_body['email'], password=make_password(p_body['password']))
+        data = {
+            'email': p_body['email'],
+            'username': p_body['email'],
+            'password': make_password(p_body['password']),
+            'last_name': 'none',
+            'first_name': 'none',
+        }
+        user = User.objects.create(**data)
 
         user.save()
         func(p_body)
 
     return wrapper
 
+@atomic
 @saveUser
 def add_teacher_db(data = None):
     if data:
         try:
             l_teacher_id = teacher_id_generator()
             data.update({'teacher_id': l_teacher_id})
+            data['password'] = make_password(data['password'])
             new_teacher = TeacherProfile(**data)
             new_teacher.save()
         except Exception as e:
@@ -30,7 +40,7 @@ def teacher_id_generator():
     if last_id == None:
         new_id = 'T001'
     else:
-        new_id = 'T' + str(int(last_id[1:]) + 1)
+        new_id = 'T' + str(int(last_id.teacher_id[1:]) + 1)
     print(new_id)
     return new_id
 

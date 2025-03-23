@@ -86,7 +86,7 @@ MIDDLEWARE = [
     # 'core.middlewares.teacher.ExceptionDisplayer',
     # 'core.middlewares.teacher.BeforeView',
     # 'core.middlewares.teacher.ManageTemplate',
-    'core.middlewares.teacher.AuthCheck',
+    # 'core.middlewares.teacher.AuthCheck',
     # 'middlewares.teacher.AuthCheck',
     # 'middlewares.teacher.TokenCheck',
 ]
@@ -96,7 +96,7 @@ ROOT_URLCONF = 'project1.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'project1/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,13 +118,17 @@ WSGI_APPLICATION = 'project1.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "djangodb",
-        "USER": "y",
-        "PASSWORD": "ypass",
-        "HOST": "127.0.0.1",
-        "PORT": "",
-    }
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "db.sqlite3",
+    },
+    # "default": {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     "NAME": "djangodb",
+    #     "USER": "y",
+    #     "PASSWORD": "ypass",
+    #     "HOST": "127.0.0.1",
+    #     "PORT": "",
+    # }
 }
 
 

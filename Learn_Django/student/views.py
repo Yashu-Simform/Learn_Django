@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse
-from student.models import Profile
+from student.models import StudentProfile
 from student.myforms import Registration, LogIn, RegistrationFile
 import json
 from django.contrib import messages
@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def student_data(request):
-    students = Profile.objects.all()
+    students = StudentProfile.objects.all()
     return render(request, 'student/profile.html', {'students': students})
 
 # Student Registration
@@ -18,12 +18,15 @@ def student_registration(request):
         data = Registration(request.POST)
         if data.is_valid():
             try:
-                messages.info(request, f"Student with data : \n{data.cleaned_data} \nis being registered...")
+                print(f"Student with data : \n{data.cleaned_data} \nis being registered...")
                 add_stu_to_db(data.cleaned_data)
+                print('Student added to db!')
                 messages.success(request, "Student Registered Successfully!")
+                return HttpResponseRedirect('/student/register/success')
             except Exception as e:
+                print(f"There is an error {e}")
                 messages.add_message(request, messages.ERROR, f"There is an error {e}")
-            return HttpResponseRedirect('/student/register/success')
+                return render(request, 'student/registration.html', {'form_obj': data})
         else:
             print('Invalid data!')
     else:
@@ -36,7 +39,6 @@ def student_registration_success(req):
 
 # Student Login
 def student_login(req):
-
     if req.method == 'POST':
         obj = LogIn(req.POST)
         if obj.is_valid():
@@ -52,7 +54,7 @@ def student_login(req):
 
 #View All students
 def view_all_students(req):
-    all_students = Profile.objects.all()
+    all_students = StudentProfile.objects.all()
     # messages.success(req, "Got the students data from db.")
 
     context = {
@@ -69,13 +71,13 @@ def view_all_students(req):
 def update_student(req, stu_id):
     if req.method == 'GET':
         print('Its GET method')
-        stu = Profile.objects.get(id=stu_id)
+        stu = StudentProfile.objects.get(student_id=stu_id)
         existing_data = {
             'name': stu.name,
             'email': stu.email,
             'password': stu.password,
             'city': stu.city,
-            'stu_class': stu.stu_class
+            'student_class': stu.student_class
         }
         existing_stu = Registration(data=existing_data)
         print(existing_data)
@@ -87,7 +89,7 @@ def update_student(req, stu_id):
         if data.is_valid():
             print(data.cleaned_data)
             try:
-                updated_stu = Profile(id=stu_id ,**data.cleaned_data)
+                updated_stu = StudentProfile(student_id=stu_id ,**data.cleaned_data)
                 updated_stu.save()
                 messages.success(req, f"Student with name: {data.cleaned_data.get('name')} is added to db.")
             except Exception as e:
