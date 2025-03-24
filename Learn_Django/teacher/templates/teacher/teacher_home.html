@@ -58,7 +58,21 @@
                 </ul>
             </div>
             <div class="courses">
-                {{ courses | safe }}
+                {% comment %} {{ courses | safe }} {% endcomment %}
+                <table class="teacher-table-custom">
+                    <thead>
+                        <tr>
+                            <th>Courses</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in courses %}
+                        <tr>
+                            <td>{{ c.course_name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

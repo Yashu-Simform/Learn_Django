@@ -21,10 +21,11 @@ def teacher_home(req):
         print('Redirect kar raha hu!')
         return HttpResponseRedirect(reverse('login'))
     base_url = 'http://127.0.0.1:8000/'
-    l_url = f'{base_url}course/getcourses/2'
+    l_url = f'{base_url}course/api/getcourses/2'
     stu_url = f'{base_url}student/getstudents/5'
     response = requests.get(l_url)
-    courses = response.text
+    json_data = json.loads(str(response.text))
+    courses = [c for c in json_data.values()]
     print(courses)
 
     get_stus = requests.get(stu_url)
@@ -97,7 +98,7 @@ def delete_teacher(req, tid):
         print(e)
         return HttpResponse(f'{e}')
 
-def get_students(req, stu_class):
+def get_students_view(req, stu_class):
     base_url = 'http://127.0.0.1:8000/'
     stu_url = f'{base_url}student/getstudents/{stu_class}'
     get_stus = requests.get(stu_url)
