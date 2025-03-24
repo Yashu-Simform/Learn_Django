@@ -127,7 +127,7 @@ def add_stu_from_json(req):
                         messages.success(req, f"Student with name: {stu_data.get('name')} is added to db.")
                     except Exception as e:
                         messages.error(req, f"Got an error for student with email: {stu_data.get('email')} \nerror: {e}")
-
+ 
         else:
             print('Invalid Data!')
     # print('Students data from file saved to db!')
