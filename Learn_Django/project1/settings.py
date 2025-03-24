@@ -11,16 +11,16 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import environ
+# import environ
 import os
 
 # Initialize environment variables
-env = environ.Env()
-environ.Env.read_env(env_file='./.env')
+# env = environ.Env()
+# environ.Env.read_env(env_file='./.env')
 
-# Load the base URL and port from the .env file
-BASE_URL = env('BASE_URL')
-PORT = env('PORT')
+# # Load the base URL and port from the .env file
+# BASE_URL = env('BASE_URL')
+# PORT = env('PORT')
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -86,7 +86,7 @@ MIDDLEWARE = [
     # 'core.middlewares.teacher.ExceptionDisplayer',
     # 'core.middlewares.teacher.BeforeView',
     # 'core.middlewares.teacher.ManageTemplate',
-    'core.middlewares.teacher.AuthCheck',
+    # 'core.middlewares.teacher.AuthCheck',
     # 'middlewares.teacher.AuthCheck',
     # 'middlewares.teacher.TokenCheck',
 ]
@@ -96,7 +96,7 @@ ROOT_URLCONF = 'project1.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'project1/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -104,7 +104,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'context_processors.global_settings',
+                # 'context_processors.global_settings',
             ],
         },
     },
@@ -118,13 +118,17 @@ WSGI_APPLICATION = 'project1.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "djangodb",
-        "USER": "y",
-        "PASSWORD": "ypass",
-        "HOST": "127.0.0.1",
-        "PORT": "",
-    }
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "db.sqlite3",
+    },
+    # "default": {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     "NAME": "djangodb",
+    #     "USER": "y",
+    #     "PASSWORD": "ypass",
+    #     "HOST": "127.0.0.1",
+    #     "PORT": "",
+    # }
 }
 
 

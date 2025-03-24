@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container" style="width:50%;">
+        <h1>Teacher Login</h1>
+        {% for msg in messages %}
+        {% if msg.tags == 'error' %}
+        <div class="alert alert-danger" role="alert">
+            {{msg}}
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% crispy form_obj form_obj.helper %}
+    </div>
+</body>
+</html>

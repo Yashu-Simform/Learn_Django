@@ -38,7 +38,7 @@ class TeacherLogin(forms.ModelForm):
         self.helper = FormHelper()
         # self.helper.form_action = ''
         # self.helper.form_method = 'POST'
-        self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.add_input(Submit('submit', 'Login'))
 
     class Meta:
         model = User

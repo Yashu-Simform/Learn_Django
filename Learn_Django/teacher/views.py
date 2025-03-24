@@ -96,3 +96,14 @@ def delete_teacher(req, tid):
     except Exception as e:
         print(e)
         return HttpResponse(f'{e}')
+
+def get_students(req, stu_class):
+    base_url = 'http://127.0.0.1:8000/'
+    stu_url = f'{base_url}student/getstudents/{stu_class}'
+    get_stus = requests.get(stu_url)
+    print(str(get_stus.text))
+    json_data = json.loads(str(get_stus.text))
+    students = [stu for stu in json_data.values()]
+    print(students)
+    context = {'students': students, 'loggedin': req.session['loggedin']}
+    return render(req, 'teacher/teacher_home.html', context)
