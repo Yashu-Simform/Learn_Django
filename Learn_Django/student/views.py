@@ -5,12 +5,17 @@ import json
 from django.contrib import messages
 from .db_operations import add_stu_to_db, delete_stu_db, get_students
 from django.http import JsonResponse
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+import requests
 
 # Create your views here.
 def student_data(request):
     students = StudentProfile.objects.all()
     return render(request, 'student/profile.html', {'students': students})
+
+def student_home(req):
+    return render(req, 'student/student_home.html')
 
 # Student Registration
 def student_registration(request):
@@ -37,13 +42,26 @@ def student_registration(request):
 def student_registration_success(req):
     return render(req, 'student/register_success.html')
 
+def fetchCourses(req, stu_class):
+    base_url = 'http://127.0.0.1:8000/'
+    l_url = f'{base_url}course/api/getcourses/{stu_class}'
+    response = requests.get(l_url)
+    json_data = json.loads(str(response.text))
+    courses = [c for c in json_data.values()]
+    print(courses)
+
+    context = {
+        'courses': courses
+    }
+    return render(req, 'student/student_home.html', context=context)
+
 # Student Login
 def student_login(req):
     if req.method == 'POST':
         obj = LogIn(req.POST)
         if obj.is_valid():
             print(obj.cleaned_data)
-            return HttpResponseRedirect('')
+            return HttpResponseRedirect(reverse('student_home'))
         else:
             print('Invalid data!')
     

@@ -9,4 +9,4 @@ class TeacherProfile(models.Model):
     mobile_number = models.CharField(verbose_name='mobile_number', max_length=10, null=False, unique=True)
     address = models.TextField(verbose_name='address', max_length=255)
     specialization = models.CharField(verbose_name='specialization', max_length=255, null=False)
-    password = models.CharField(max_length=50, verbose_name='password', null=False, blank=False, default='iron@man-power+')
+    password = models.CharField(max_length=255, verbose_name='password', null=False, blank=False, default='iron@man-power+')
