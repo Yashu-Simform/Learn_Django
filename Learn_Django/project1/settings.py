@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 # import environ
 import os
+from dotenv import load_dotenv
+import dotenv
+
 
 # Initialize environment variables
 # env = environ.Env()
@@ -22,6 +25,7 @@ import os
 # BASE_URL = env('BASE_URL')
 # PORT = env('PORT')
 
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,7 +35,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(mrqtbt8_bys_ow-nw0n0wg@0e9klcp2d1+kne5-)%nn=m1yyw'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -48,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'tailwind',
     'theme',
     'django_browser_reload',
@@ -122,12 +127,12 @@ DATABASES = {
     #     "NAME": "db.sqlite3",
     # },
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "djangodb",
-        "USER": "y",
-        "PASSWORD": "ypass",
-        "HOST": "127.0.0.1",    
-        "PORT": "",
+        "ENGINE": os.environ.get('ENGINE'),
+        "NAME": os.environ.get('NAME'),
+        "USER": os.environ.get('DB_USER'),
+        "PASSWORD": os.environ.get('DB_PASSWORD'),
+        "HOST": os.environ.get('HOST'),    
+        "PORT": os.environ.get('DATABASE_PORT'),
     }
 }
 
