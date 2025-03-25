@@ -4,6 +4,14 @@ from .myforms import AddCourse
 from django.http import HttpResponse, JsonResponse
 from .db_operations import add_course_db, stu_class_courses
 
+#DRF
+from .serializers import CourseSerializer
+from rest_framework.parsers import JSONParser
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
+from rest_framework import status
+from rest_framework.response import Response
+
 # Create your views here.
 def add_course(req):
     if req.method == 'POST':
@@ -28,23 +36,69 @@ def get_courses(req, p_stu_class):
         return HttpResponse(f'Error occurs as: {e}')
     
 
-# API's 
+#--------------API's in Django
+
+# get courses for specified stu class
+# def api_get_courses(req, p_stu_class):
+#     try:
+#         courses = stu_class_courses(p_stu_class)
+#         json_data = {i: c.toJSON() for i, c in enumerate(courses)}
+#         return JsonResponse(json_data)
+#     except Exception as e:
+#         print(f'Error occurs as: {e}')
+#         return HttpResponse(f'Error occurs as: {e}')
+    
+# def api_get_all_courses(req):
+#     try:
+#         courses = stu_class_courses()
+#         json_data = {i: c.toJSON() for i, c in enumerate(courses)}
+#         return JsonResponse(json_data)
+#     except Exception as e:
+#         print(f'Error occurs as: {e}')
+#         return HttpResponse(f'Error occurs as: {e}')
+    
+
+#-------------- Django REST Framework - API's
+
+# Returns all courses
+def api_get_all_courses(req):
+    """
+    API for getting all courses. 
+    Returns a JSON response
+    """
+    if req.method == 'GET':
+        serializer = CourseSerializer(Course.objects.all(), many=True)
+        return Response(serializer.data)
+    else:
+        return Response({'error': 'Invalid HTTP method call!'},status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    
 
 # get courses for specified stu class
 def api_get_courses(req, p_stu_class):
     try:
         courses = stu_class_courses(p_stu_class)
-        json_data = {i: c.toJSON() for i, c in enumerate(courses)}
-        return JsonResponse(json_data)
+        serializer = CourseSerializer(courses, many=True)
+        return Response(serializer.data)
     except Exception as e:
         print(f'Error occurs as: {e}')
-        return HttpResponse(f'Error occurs as: {e}')
+        return Response(serializer.errors,status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
-def api_get_all_courses(req):
-    try:
-        courses = stu_class_courses()
-        json_data = {i: c.toJSON() for i, c in enumerate(courses)}
-        return JsonResponse(json_data)
-    except Exception as e:
-        print(f'Error occurs as: {e}')
-        return HttpResponse(f'Error occurs as: {e}')
+
+# Create your views here.
+@csrf_exempt
+def api_add_course(req):
+    if req.method == 'POST':
+        parsed_data = JSONParser().parse(req)
+        serializer = CourseSerializer(data=parsed_data)
+
+        if serializer.is_valid():
+            print(serializer.validated_data)
+            try:
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except Exception as e:
+                print(f'An error occured: {e}')
+                return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+    return JsonResponse({},status=404)
