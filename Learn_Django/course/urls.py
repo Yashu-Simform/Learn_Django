@@ -9,4 +9,5 @@ urlpatterns = [
     path('api/getcourses/<int:p_stu_class>', api_get_courses, name='api_get_courses'),
     path('api/getcourses/', api_get_all_courses, name='api_get_all_courses'),
     path('api/addcourse/', api_add_course, name='api_add_course'),
+    path('api/deletecourse/<course_id>', api_delete_course, name='api_delete_course'),
 ]

@@ -160,6 +160,3 @@ def add_stu_from_json(req):
 def api_get_students(req, p_stu_class):
     students = get_students(p_stu_class)
     return JsonResponse(students)
-
-
-# Django REST Framework

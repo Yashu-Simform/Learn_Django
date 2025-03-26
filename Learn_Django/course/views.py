@@ -84,7 +84,7 @@ def api_get_courses(req, p_stu_class):
         return Response(serializer.errors,status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
 
-# Create your views here.
+@api_view(['POST'])
 @csrf_exempt
 def api_add_course(req):
     if req.method == 'POST':
@@ -102,3 +102,16 @@ def api_add_course(req):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
     return JsonResponse({},status=404)
+
+# Delete course 
+@api_view(['DELETE'])
+def api_delete_course(req, course_id):
+    c = None
+    try:
+        c = Course.objects.get(course_id=course_id)
+        c.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    except:
+        if not c:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
