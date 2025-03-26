@@ -61,7 +61,8 @@ def get_courses(req, p_stu_class):
 #-------------- Django REST Framework - API's
 
 # Returns all courses
-def api_get_all_courses(req):
+@api_view(['GET'])
+def api_get_all_courses(req, format=None):
     """
     API for getting all courses. 
     Returns a JSON response
@@ -74,7 +75,8 @@ def api_get_all_courses(req):
     
 
 # get courses for specified stu class
-def api_get_courses(req, p_stu_class):
+@api_view(['GET'])
+def api_get_courses(req, p_stu_class, format=None):
     try:
         courses = stu_class_courses(p_stu_class)
         serializer = CourseSerializer(courses, many=True)
@@ -86,7 +88,7 @@ def api_get_courses(req, p_stu_class):
 
 @api_view(['POST'])
 @csrf_exempt
-def api_add_course(req):
+def api_add_course(req, format=None):
     if req.method == 'POST':
         parsed_data = JSONParser().parse(req)
         serializer = CourseSerializer(data=parsed_data)
@@ -105,7 +107,7 @@ def api_add_course(req):
 
 # Delete course 
 @api_view(['DELETE'])
-def api_delete_course(req, course_id):
+def api_delete_course(req, course_id, format=None):
     c = None
     try:
         c = Course.objects.get(course_id=course_id)
