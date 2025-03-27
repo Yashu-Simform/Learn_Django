@@ -1,11 +1,13 @@
 from django.db import models
+from autoslug import AutoSlugField
+from django.utils.text import slugify
 
 # Create your models here.
 class Course(models.Model):
     course_id = models.CharField(verbose_name='course_id', max_length=100, null=False, unique=True, primary_key=True, blank=True)
     course_name = models.CharField(max_length=255,verbose_name='course_name')
     stu_class = models.IntegerField(verbose_name='stu_class',choices=[(1, '1'),(2, '2'),(3, '3'),(4, '4'),(5, '5'),(6, '6'),(7, '7'),(8, '8'),(9, '9'),(10, '10'),(11, '11'),(12, '12')])
-
+    # slug = AutoSlugField(verbose_name='slug', populate_from=)
 
     def save(self, *args, **kwargs):
         if not self.course_id:

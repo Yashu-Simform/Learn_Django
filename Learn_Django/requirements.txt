@@ -9,6 +9,7 @@ colorama==0.4.6
 cookiecutter==2.6.0
 crispy-bootstrap5==2024.10
 Django==5.1.6
+django-autoslug==1.9.9
 django-browser-reload==1.18.0
 django-crispy-forms==2.3
 django-environ==0.12.0

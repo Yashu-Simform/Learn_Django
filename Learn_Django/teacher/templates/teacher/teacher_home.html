@@ -53,7 +53,7 @@
                 </button>
                 <ul class="dropdown-menu teacher-dropdown-menu-custom" aria-labelledby="courseDropdown">
                     {% for class in 12|get_range %}
-                    <li><a class="dropdown-item" href="#">{{ forloop.counter }}</a></li>
+                    <li><a class="dropdown-item" href="{% url 'fetchcourses' forloop.counter %}">{{ forloop.counter }}</a></li>
                     {% endfor %}
                 </ul>
             </div>

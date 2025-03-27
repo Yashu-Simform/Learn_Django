@@ -11,6 +11,10 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from django import http
+from rest_framework import mixins
+from rest_framework import generics
 
 # Create your views here.
 def add_course(req):
@@ -117,3 +121,100 @@ def api_delete_course(req, course_id, format=None):
         if not c:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+
+# Class based views
+class API_Get_All_Courses(APIView):
+    def get(self, req, format=None):
+        """
+        API for getting all courses. 
+        Returns a JSON response
+        """
+        if req.method == 'GET':
+            serializer = CourseSerializer(Course.objects.all(), many=True)
+            return Response(serializer.data)
+        else:
+            return Response({'error': 'Invalid HTTP method call!'},status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        
+class API_Get_Courses(APIView):
+
+    def get(self, req, p_stu_class, format=None):
+        try:
+            courses = stu_class_courses(p_stu_class)
+            serializer = CourseSerializer(courses, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            print(f'Error occurs as: {e}')
+            return Response(serializer.errors,status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+# Course object instance class    
+class API_Course(APIView):
+
+    def get_course_object(self, pk):
+        try:
+            instance = Course.objects.get(course_id = pk)
+            return instance
+        except:
+            raise http.Http404
+
+    def get(self, req, p_stu_class, format=None):
+        try:
+            courses = stu_class_courses(p_stu_class)
+            serializer = CourseSerializer(courses, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            print(f'Error occurs as: {e}')
+            return Response(serializer.errors,status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        
+    def put(self, req, p_stu_class, format=None):
+        instance = self.get_course_object(p_stu_class)
+        serializer = CourseSerializer(instance, data=req.data)
+
+        if serializer.is_valid():
+            print('Ha ye valid he!')
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    def delete(self, req, p_stu_class, format=None):
+        try:
+            instance = self.get_course_object(p_stu_class)
+            instance.delete()
+
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+# Implementing class based viewsusing mixins
+
+
+class API_Course_using_mixins(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    generics.GenericAPIView):
+
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+
+    def get(self, req, *args, **kwargs):
+        return self.retrieve(req, *args, **kwargs)
+        
+    def put(self, req, *args, **kwargs):
+        return self.update(req, *args, **kwargs)
+        
+    def delete(self, req, *args, **kwargs):
+        return self.destroy(req, *args, **kwargs)
+
+
+# Get course list using ***Generic Views***
+class API_Course_List_using_generic_views(generics.ListAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+
+class API_Course_using_generic_views(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer

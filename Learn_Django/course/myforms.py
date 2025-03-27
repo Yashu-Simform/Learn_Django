@@ -15,4 +15,3 @@ class AddCourse(forms.ModelForm):
     class Meta:
         model = Course
         fields = ['course_name', 'stu_class']
-        
