@@ -16,3 +16,7 @@
     {% crispy form_obj form_obj.helper %}
 </div>
 {% endblock addon %}
+
+{% block afterjs %}
+<script src="{% static "scripts/login.js" %}"></script>
+{% endblock afterjs %}

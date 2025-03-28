@@ -17,17 +17,19 @@ from .serializers import TeacherSerializer
 from core.serializers import UserSerializer
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
 
 # Create your views here.
 # def teacher_home(req):
 #     return render(req, 'teacher/teacher_home.html')
 
 def teacher_home(req):
-    if 'loggedin' in req.session and req.session['loggedin'] == True:
-        print('Ha bhai to achuka he pehle!')
-    else:
-        print('Redirect kar raha hu!')
-        return HttpResponseRedirect(reverse('login'))
+    # if 'loggedin' in req.session and req.session['loggedin'] == True:
+    #     print('Ha bhai to achuka he pehle!')
+    # else:
+    #     print('Redirect kar raha hu!')
+    #     return HttpResponseRedirect(reverse('login'))
     base_url = 'http://127.0.0.1:8000/'
     l_url = f'{base_url}course/api/getcourses/1'
     stu_url = f'{base_url}student/getstudents/5'
@@ -42,9 +44,9 @@ def teacher_home(req):
     json_data = json.loads(str(get_stus.text))
     students = [stu for stu in json_data.values()]
     print(students)
-    students = get_students_view()  
-    courses = get_courses_view()
-    context = {'courses': courses, 'students': students, 'loggedin': req.session['loggedin']}
+    students = []
+    courses = []
+    context = {'courses': courses, 'students': students}
     return render(req, 'teacher/teacher_home.html', context)
 
 
@@ -64,27 +66,8 @@ def teacher_home(req):
 
 
 def login_teacher(req):
-    if req.method == 'POST':
-        #Authenticate user from db
-        print(f'Login req body: {req.POST}')
-        
-        response = TeacherLogin(req.POST)
-        if response.is_valid():
-            print(response.cleaned_data['email'])
-            user = list(User.objects.filter(email=response.cleaned_data['email']))
-            print(user)
-            if len(user) > 0:
-                login(req, user[0])
-                req.session['loggedin'] = True
-                return HttpResponseRedirect(reverse('teacher_home'))
-            else:
-                print('No such user exists!')
-                messages.add_message(req, messages.ERROR, 'No such user exists!')
-        pass
-    else:
-        response = TeacherLogin()
-    
-    return render(req, 'teacher/login.html', {'form_obj': response})
+    if req.method == 'GET':
+        return render(req, 'teacher/login.html', {'form_obj': TeacherLogin()})
 
 
 def logout_teacher(req):
@@ -170,9 +153,34 @@ class API_Teacher_Login(APIView):
     def post(self, req, format=None):
         user = get_object_or_404(User, email=req.data['email'])
 
-        serializer = UserSerializer(User.objects.all())
-        # return Response()
-        return Response({})
+        serializer = UserSerializer(data=req.data)
+
+        if not serializer.is_valid():
+            return Response({
+                "status": "False",
+                "data": serializer.errors
+            })
+        
+        user_email = serializer.data['email']
+        user_password = serializer.data['password']
+
+        user_obj = authenticate(username=user_email,password=user_password)
+
+        if user_obj:
+            token, _ = Token.objects.get_or_create(user=user_obj)
+            print(token)
+
+            return Response({
+                "status": True,
+                "data" : {"token": str(token) }
+            },
+            content_type='json'
+            )
+
+        return Response({
+            "status": True,
+            "data": "Invalid Credentials!"
+        })
 
 
 class API_Teacher_SignUp(mixins.CreateModelMixin, generics.GenericAPIView):
