@@ -1,3 +1,5 @@
+import get_cookie_dict  from "./utils.js"
+
 var submitbtn = document.getElementById('submit_btn')
 console.log('Script running')
 
@@ -6,6 +8,20 @@ submitbtn.addEventListener("click", async function (event) {
     console.log("Btn clicked!")
     let csrf_token = document.getElementsByName('csrfmiddlewaretoken')
     console.log(csrf_token)
+
+    // fetch(url,
+    //     {
+    //         method: 'GET'
+    //     }
+    // )
+    // .then(response => response.json())
+    // .then(
+    //     data => {
+    //         //
+    //     }
+    // )
+
+    // console.log(document.cookie)
 
     let email_field = document.getElementsByName('email')
     console.log(email_field)
@@ -30,9 +46,35 @@ async function submitForm(p_url, p_body){
     .then(response => response.json())
     .then(
         data => {
+            if (data){
             console.log(data)
             if (data['status']){
-                document.location = 'http://127.0.0.1:8000/teacher/'
+                const cookie_dict = get_cookie_dict(document.cookie)
+                if (!cookie_dict['token']){
+                    document.cookie = `token=${data['data']['token']}; path=/teacher;`
+                }
+                
+                location = 'http://127.0.0.1:8000/teacher/'
+                fetch('http://127.0.0.1:8000/teacher/',
+                    {
+                        method: 'GET',
+                        credentials:"include",
+                        headers:{
+                            'Content-Type': 'application/json',
+                            'token': cookie_dict['token']
+                        },
+                    }
+                )
+                .then(
+                    response => response.json()
+                )
+                .then(
+                    p_data => console.log(p_data)
+                )
+            }
+            }
+            else{
+                console.log('No response received!')
             }
         }
     )

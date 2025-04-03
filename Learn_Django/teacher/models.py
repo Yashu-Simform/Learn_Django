@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 from django.db.transaction import atomic
 from .db_operations import saveUserFun
+from django.contrib.auth.hashers import make_password
 
 # Create your models here.
 class TeacherProfile(models.Model):
@@ -18,6 +19,7 @@ class TeacherProfile(models.Model):
         if not self.teacher_id:
             self.teacher_id = TeacherProfile.teacher_id_generator()
         try:
+            self.password = make_password(self.password)
             saveUserFun({'email': self.email, 'password': self.password})
         except Exception as e:
             raise e

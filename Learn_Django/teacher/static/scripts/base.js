@@ -1,19 +1,32 @@
+import get_cookie_dict from "./utils.js"
+
 const authbtn = document.getElementById('authbtn')
 const notifybtn = document.getElementById('notification')
 // let data = JSON.parse("{{ loggedin | escapejs }}")
-let data = document.currentScript.getAttribute('loggedin')
-console.log(data)
+// let data = document.currentScript.getAttribute('loggedin')
+// console.log(data)
+
+
+function authBtnSet() {
+    const cookie_dict = get_cookie_dict(document.cookie)
+    const hasToken = "token" in (cookie_dict ? cookie_dict:{});
+    if (hasToken){
+        authbtn.textContent = "Logout";
+    }else{
+        authbtn.textContent = "Login";  
+    }
+}
+if (authbtn){
+authBtnSet();
 
 authbtn.addEventListener('click', function () {
     console.log('btn clicked!') 
-    if(data == "True"){
-        // User has logged in
-        const xhttp = new XMLHttpRequest()
-        xhttp.open("GET", 'http://127.0.0.1:8000/teacher/logout/')
-        xhttp.send()
-        console.log(xhttp.response)
-    }else{
-        // User has not logged in
+    const cookie_dict = get_cookie_dict(document.cookie)
+    if (!cookie_dict['token']){
+        document.location.href = "http://127.0.0.1:8000/teacher/loginPage/"
+    }
+    else{
+        // document.cookie
     }
 })
 
@@ -56,3 +69,4 @@ notifybtn.addEventListener('click', function(){
 
 })
 
+}

@@ -1,0 +1,31 @@
+<div class="card teacher-card-custom">
+    <h2>Students</h2>
+    <div class="dropdown teacher-dropdown-custom">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="studentDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            Select Class
+        </button>
+        <ul class="dropdown-menu teacher-dropdown-menu-custom" aria-labelledby="studentDropdown">
+            {% for class in 12|get_range %}
+            <li><a class="dropdown-item" href="{% url 'fetchstudents' forloop.counter %}">{{ forloop.counter }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <table class="teacher-table-custom">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stu in students %}
+            <tr>
+                <td>{{ stu.student_id }}</td>
+                <td>{{ stu.name }}</td>
+                <td>{{ stu.email }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

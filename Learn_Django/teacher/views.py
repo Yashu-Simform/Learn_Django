@@ -13,18 +13,22 @@ from django.contrib import messages
 # DRF
 from rest_framework.views import APIView
 from rest_framework import generics, mixins
-from .serializers import TeacherSerializer
+from .serializers import TeacherBaseSerializer
 from core.serializers import UserSerializer
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
+from rest_framework import permissions, authentication
+# from core import custom_permissions
+from core.custom_permissions import StaffEditorPermissionMixin
 
 # Create your views here.
 # def teacher_home(req):
 #     return render(req, 'teacher/teacher_home.html')
 
 def teacher_home(req):
+    print((req.headers))
     # if 'loggedin' in req.session and req.session['loggedin'] == True:
     #     print('Ha bhai to achuka he pehle!')
     # else:
@@ -65,7 +69,7 @@ def teacher_home(req):
 #     return render(req, 'teacher/teacher_registration.html', context)
 
 
-def login_teacher(req):
+def teacher_loginPage(req):
     if req.method == 'GET':
         return render(req, 'teacher/login.html', {'form_obj': TeacherLogin()})
 
@@ -76,7 +80,7 @@ def logout_teacher(req):
     
     try:
         # del req.session['loggedin']
-        req.session.flush()
+        # req.session.flush()
         return HttpResponseRedirect(reverse('project_home'))
     except Exception as e:
         print(f'Error while logging out: {e}')
@@ -101,7 +105,7 @@ def get_students_view(req, stu_class):
     students = [stu for stu in json_data.values()]
     print(students)
     # return students
-    context = {'students': students, 'loggedin': req.session['loggedin']}
+    context = {'students': students}
     return render(req, 'teacher/teacher_home.html', context)
 
 
@@ -114,7 +118,7 @@ def get_courses_view(req, stu_class=1):
     courses = [c for c in json_data]
     print(courses)
     # return courses
-    context = {'students': courses, 'loggedin': req.session['loggedin']}
+    context = {'students': courses}
     return render(req, 'teacher/teacher_home.html', context)
 
 
@@ -124,7 +128,8 @@ def get_courses_view(req, stu_class=1):
 class API_Teacher(mixins.UpdateModelMixin ,mixins.DestroyModelMixin ,mixins.RetrieveModelMixin ,mixins.CreateModelMixin, generics.GenericAPIView):
     
     queryset = TeacherProfile.objects.all()
-    serializer_class = TeacherSerializer
+    serializer_class = TeacherBaseSerializer
+    lookup_field = 'teacher_id'
 
     def post(self, req, *args, **kwargs):
         return self.create(req, *args, **kwargs)
@@ -142,7 +147,7 @@ class API_Teacher(mixins.UpdateModelMixin ,mixins.DestroyModelMixin ,mixins.Retr
 class API_Teacher_List(mixins.ListModelMixin, generics.GenericAPIView):
 
     queryset = TeacherProfile.objects.all()
-    serializer_class = TeacherSerializer
+    serializer_class = TeacherBaseSerializer
 
     def get(self, req, *args, **kwargs):
         return self.list(req, *args, **kwargs)
@@ -151,7 +156,6 @@ class API_Teacher_List(mixins.ListModelMixin, generics.GenericAPIView):
 class API_Teacher_Login(APIView):
 
     def post(self, req, format=None):
-        user = get_object_or_404(User, email=req.data['email'])
 
         serializer = UserSerializer(data=req.data)
 
@@ -182,11 +186,49 @@ class API_Teacher_Login(APIView):
             "data": "Invalid Credentials!"
         })
 
+# Object retrive API
+class API_Teacher_Retrive(generics.RetrieveAPIView):
+    queryset = TeacherProfile.objects.all()
+    serializer_class = TeacherBaseSerializer
+    lookup_field = 'teacher_id' #primary field name used to get the object 
 
+    # The generic RetriveAPIView class has a default method for 'GET' method so by just inheriting this class you are able to retrive data.
+
+# Object create API
+class API_Teacher_Create(generics.CreateAPIView):
+    queryset = TeacherProfile.objects.all()
+    serializer_class = TeacherBaseSerializer
+    lookup_field = 'teacher_id' #primary field name used to get the object 
+
+# Object Update API
+class API_Teacher_Update(generics.UpdateAPIView):
+    queryset = TeacherProfile.objects.all()
+    serializer_class = TeacherBaseSerializer
+    lookup_field = 'teacher_id' #primary field name used to get the object 
+
+# Object delete API
+class API_Teacher_Delete(generics.DestroyAPIView):
+    queryset = TeacherProfile.objects.all()
+    serializer_class = TeacherBaseSerializer
+    lookup_field = 'teacher_id' #primary field name used to get the object 
+
+# List of Object API
+class API_Teacher_List(generics.ListAPIView):
+    queryset = TeacherProfile.objects.all()
+    serializer_class = TeacherBaseSerializer
+
+# List and Create API for Object
+class API_Teacher_List_and_Create(StaffEditorPermissionMixin, generics.ListCreateAPIView):
+
+    queryset = TeacherProfile.objects.all()
+    serializer_class = TeacherBaseSerializer
+    authentication_classes = [authentication.SessionAuthentication, authentication.TokenAuthentication]
+
+# Signup or Register Teacher
 class API_Teacher_SignUp(mixins.CreateModelMixin, generics.GenericAPIView):
 
     queryset = TeacherProfile.objects.all()
-    serializer_class = TeacherSerializer
+    serializer_class = TeacherBaseSerializer
 
     def post(self, req, *args, **kwargs):
         return self.create(req, *args, **kwargs)
