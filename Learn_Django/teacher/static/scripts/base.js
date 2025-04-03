@@ -1,32 +1,24 @@
 import get_cookie_dict from "./utils.js"
+import {get_welcome_page, get_teacher_login_page} from "./apicalls.js";
+import { url_teacher_home, url_welcome_page, url_teacher_login_page } from "./urls.js";
 
 const authbtn = document.getElementById('authbtn')
 const notifybtn = document.getElementById('notification')
-// let data = JSON.parse("{{ loggedin | escapejs }}")
-// let data = document.currentScript.getAttribute('loggedin')
-// console.log(data)
 
-
-function authBtnSet() {
-    const cookie_dict = get_cookie_dict(document.cookie)
-    const hasToken = "token" in (cookie_dict ? cookie_dict:{});
-    if (hasToken){
-        authbtn.textContent = "Logout";
-    }else{
-        authbtn.textContent = "Login";  
-    }
+function logoutUser(){
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    get_welcome_page(url_welcome_page);
 }
+
 if (authbtn){
-authBtnSet();
 
 authbtn.addEventListener('click', function () {
     console.log('btn clicked!') 
+    logoutUser()
     const cookie_dict = get_cookie_dict(document.cookie)
     if (!cookie_dict['token']){
-        document.location.href = "http://127.0.0.1:8000/teacher/loginPage/"
-    }
-    else{
-        // document.cookie
+        console.log('Logout btn clicked, where user not logged in!')
+        get_teacher_login_page(url_teacher_login_page)
     }
 })
 
@@ -39,11 +31,6 @@ notifybtn.addEventListener('click', function(){
         console.log('Getting notifications.')
         // Getting all notifications
         const url = "http://127.0.0.1:8000/notifications/getnotifications/student/1"
-        // const xhttp = new XMLHttpRequest()
-        // xhttp.open("GET", url)
-        // xhttp.send()
-        // response = xhttp.responseText
-        // console.log(response)
 
         fetch(url)
         .then(response => response.json())
@@ -64,9 +51,6 @@ notifybtn.addEventListener('click', function(){
     }
 
     panel.classList.toggle("active");
-
-    
-
 })
 
 }

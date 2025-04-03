@@ -22,16 +22,32 @@ from django.contrib.auth import authenticate
 from rest_framework import permissions, authentication
 # from core import custom_permissions
 from core.custom_permissions import StaffEditorPermissionMixin
+from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from django.contrib.auth.decorators import login_required
+from rest_framework.authentication import TokenAuthentication
+from core.custom_authentication_system import CustomTokenAuth
 
 # Create your views here.
 # def teacher_home(req):
 #     return render(req, 'teacher/teacher_home.html')
 
 def teacher_home(req):
+    try:
+        user, token = CustomTokenAuth().auth_using_cookies(req)
+    except Exception as e:
+        try:
+            user, token = TokenAuthentication().authenticate(req)
+        except Exception as e:
+            print('Error : {e}')
+            return HttpResponseRedirect(reverse('login_teacher'))
+        print('Error : {e}')
+        return HttpResponseRedirect(reverse('login_teacher'))
+        
     print((req.headers))
     # if 'loggedin' in req.session and req.session['loggedin'] == True:
     #     print('Ha bhai to achuka he pehle!')
-    # else:
+    # else: 
     #     print('Redirect kar raha hu!')
     #     return HttpResponseRedirect(reverse('login'))
     base_url = 'http://127.0.0.1:8000/'
@@ -52,6 +68,27 @@ def teacher_home(req):
     courses = []
     context = {'courses': courses, 'students': students}
     return render(req, 'teacher/teacher_home.html', context)
+
+# class teacher_home(APIView):
+#     def post(self, req):
+#         base_url = 'http://127.0.0.1:8000/'
+#         l_url = f'{base_url}course/api/getcourses/1'
+#         stu_url = f'{base_url}student/getstudents/5'
+#         response = requests.get(l_url)
+#         json_data = json.loads(str(response.text))
+#         print(json_data)
+#         courses = [c for c in json_data]
+#         print(courses)
+
+#         get_stus = requests.get(stu_url)
+#         print(str(get_stus.text))
+#         json_data = json.loads(str(get_stus.text))
+#         students = [stu for stu in json_data.values()]
+#         print(students)
+#         students = []
+#         courses = []
+#         context = {'courses': courses, 'students': students}
+#         return render(req, 'teacher/teacher_home.html', context)
 
 
 # def register_teacher(req):
@@ -75,12 +112,14 @@ def teacher_loginPage(req):
 
 
 def logout_teacher(req):
-    if not req.session['loggedin']:
-        print('Sale logout to he!')
+    # if not req.session['token']:
+    #     print('Sale logout to he!')
     
     try:
         # del req.session['loggedin']
-        # req.session.flush()
+        req.session.flush()
+        print(req.COOKIES)
+        req.COOKIES.pop('token')
         return HttpResponseRedirect(reverse('project_home'))
     except Exception as e:
         print(f'Error while logging out: {e}')
@@ -185,6 +224,14 @@ class API_Teacher_Login(APIView):
             "status": True,
             "data": "Invalid Credentials!"
         })
+    
+class API_Teacher_Logout(APIView):
+    def get(self, req, *args, **kwargs):
+        try:
+            pass
+        except:
+            pass
+    pass
 
 # Object retrive API
 class API_Teacher_Retrive(generics.RetrieveAPIView):

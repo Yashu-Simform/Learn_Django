@@ -51,10 +51,12 @@ async function submitForm(p_url, p_body){
             if (data['status']){
                 const cookie_dict = get_cookie_dict(document.cookie)
                 if (!cookie_dict['token']){
-                    document.cookie = `token=${data['data']['token']}; path=/teacher;`
+                    document.cookie = `token=${data['data']['token']}; path=/;`
                 }
                 
-                location = 'http://127.0.0.1:8000/teacher/'
+                // location = 'http://127.0.0.1:8000/teacher/'
+
+
                 fetch('http://127.0.0.1:8000/teacher/',
                     {
                         method: 'GET',
