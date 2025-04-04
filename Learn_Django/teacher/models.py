@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 from django.db.transaction import atomic
-from .db_operations import saveUserFun
+from core.db_operations import saveUserFun
 from django.contrib.auth.hashers import make_password
 
 # Create your models here.

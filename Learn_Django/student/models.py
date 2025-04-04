@@ -1,4 +1,7 @@
 from django.db import models
+from django.db.transaction import atomic
+from core.db_operations import saveUserFun
+from django.contrib.auth.hashers import make_password
 
 # Create your models here.
 
@@ -20,6 +23,27 @@ class StudentProfile(models.Model):
                'password': self.password,
                'city': self.city,
                'student_class': self.student_class}
+    @atomic
+    def save(self, *args, **kwargs):
+        if not self.teacher_id:
+            self.teacher_id = StudentProfile.teacher_id_generator()
+        try:
+            self.password = make_password(self.password)
+            saveUserFun({'email': self.email, 'password': self.password})
+        except Exception as e:
+            raise e
+        return super(StudentProfile,self).save(*args, **kwargs)
+    
+    @staticmethod
+    def student_id_generator():
+        new_id = None
+        last_id = StudentProfile.objects.all().order_by('student_id').last()
+        if last_id == None:
+            new_id = 'S001'
+        else:
+            new_id = 'S' + str(int(last_id.student_id[1:]) + 1).rjust(3, '0')
+        print(new_id)
+        return new_id
     
 
 class Result(models.Model):

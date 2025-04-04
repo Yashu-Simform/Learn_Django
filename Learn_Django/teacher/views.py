@@ -195,6 +195,8 @@ class API_Teacher_List(mixins.ListModelMixin, generics.GenericAPIView):
 class API_Teacher_Login(APIView):
 
     def post(self, req, format=None):
+        if 'token' in req.COOKIES:
+            return HttpResponseRedirect(reverse('teacher_home'))
 
         serializer = UserSerializer(data=req.data)
 

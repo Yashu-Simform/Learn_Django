@@ -1,4 +1,5 @@
 import get_cookie_dict  from "./utils.js"
+import { url_teacher_home, url_welcome_page, url_teacher_login_page } from "./urls.js";
 
 var submitbtn = document.getElementById('submit_btn')
 console.log('Script running')
@@ -8,20 +9,6 @@ submitbtn.addEventListener("click", async function (event) {
     console.log("Btn clicked!")
     let csrf_token = document.getElementsByName('csrfmiddlewaretoken')
     console.log(csrf_token)
-
-    // fetch(url,
-    //     {
-    //         method: 'GET'
-    //     }
-    // )
-    // .then(response => response.json())
-    // .then(
-    //     data => {
-    //         //
-    //     }
-    // )
-
-    // console.log(document.cookie)
 
     let email_field = document.getElementsByName('email')
     console.log(email_field)
@@ -56,23 +43,26 @@ async function submitForm(p_url, p_body){
                 
                 // location = 'http://127.0.0.1:8000/teacher/'
 
+                window.location.href = 'http://127.0.0.1:8000/teacher/'
 
-                fetch('http://127.0.0.1:8000/teacher/',
-                    {
-                        method: 'GET',
-                        credentials:"include",
-                        headers:{
-                            'Content-Type': 'application/json',
-                            'token': cookie_dict['token']
-                        },
-                    }
-                )
-                .then(
-                    response => response.json()
-                )
-                .then(
-                    p_data => console.log(p_data)
-                )
+                // fetch('http://127.0.0.1:8000/teacher/',
+                //     {
+                //         method: 'GET',
+                //         credentials:"include",
+                //         headers:{
+                //             'Content-Type': 'text/html',
+                //             'token': cookie_dict['token']
+                //         },
+                //     }
+                // )
+                // .then(
+                //     response => {
+                //         console.log(response)
+                //     }
+                // )
+                // .then(
+                //     p_data => console.log(p_data)
+                // )
             }
             }
             else{

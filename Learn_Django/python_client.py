@@ -37,7 +37,7 @@ def getAuthenticate():
 # def view_teachers_list():
 
 def main():
-    auth_response = getAuthenticate()
+    auth_response = getAuthenticate() 
 
     if auth_response.status_code == 200:
         token = auth_response.json()['token']

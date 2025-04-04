@@ -9,6 +9,8 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 import requests
 
+from rest_framework.views import APIView
+
 # Create your views here.
 def student_data(request):
     students = StudentProfile.objects.all()
@@ -18,7 +20,7 @@ def student_home(req):
     return render(req, 'student/student_home.html')
 
 # Student Registration
-def student_registration(request):
+def student_registration_page(request):
     if request.method == 'POST':
         data = Registration(request.POST)
         if data.is_valid():
@@ -160,3 +162,32 @@ def add_stu_from_json(req):
 def api_get_students(req, p_stu_class):
     students = get_students(p_stu_class)
     return JsonResponse(students)
+
+
+
+# --------------------DRF
+from rest_framework import generics, mixins
+from .serializers import StudentBaseSerializer
+
+class API_Student(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    generics.GenericAPIView):
+    
+    queryset = StudentProfile.objects.all()
+    serializer_class = StudentBaseSerializer
+    lookup_field = 'student_id'
+
+    def post(self, req, *args, **kwargs):
+        return self.create(req, *args, **kwargs)
+    
+    def get(self, req, *args, **kwargs):
+        return self.retrieve(req, *args, **kwargs)
+    
+    def put(self, req, *args, **kwargs):
+        return self. update(req, *args, **kwargs)
+    
+    def destroy(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)

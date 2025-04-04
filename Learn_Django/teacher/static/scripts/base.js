@@ -7,19 +7,20 @@ const notifybtn = document.getElementById('notification')
 
 function logoutUser(){
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    get_welcome_page(url_welcome_page);
+    window.location.href = url_teacher_login_page;
 }
 
 if (authbtn){
 
 authbtn.addEventListener('click', function () {
     console.log('btn clicked!') 
-    logoutUser()
     const cookie_dict = get_cookie_dict(document.cookie)
     if (!cookie_dict['token']){
         console.log('Logout btn clicked, where user not logged in!')
-        get_teacher_login_page(url_teacher_login_page)
+        window.location.href = url_teacher_login_page;
     }
+    
+    logoutUser();
 })
 
 notifybtn.addEventListener('click', function(){
