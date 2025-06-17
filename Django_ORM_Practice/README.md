@@ -14,8 +14,53 @@
 | `.order_by()`      | Sorts results                         | ORDER BY                                                       |
 | `.values()`        | Select specific columns               | SELECT columns                                                 |
 
+### objects
+-   `objects` is a Model Manager provided as default in django to each and every models.Model class.
+-   Model manager provide an interface between model and database to query data from django models to database. 
 
-### What does `select_related` do in Django ORM?
+### objects.count()
+-   Gives the count of available records in database.
+
+### objects.get_or_create()
+-   It will first make a query to fetch record with given data from database if no records matches, it will create a new one.
+-   Create the object if not present in db, and return the result as tuple (ModelInstance, bool).
+-   True: if new record is created.
+-   False: if record is already present and just fetched. 
+
+### filter() and exclude()
+-   Used to add `were` clause in the SQL statement
+-   #### filter() - 'WHERE' and exclude() - 'WHERE NOT'
+-   we can perform lookups on a model field like fieldname__gte, fieldname__gt, fieldname__lte, fieldname__lt
+-   Common lookups:
+    -   exact: Matches the exact value.
+    -   iexact: Case-insensitive exact match.
+    -   contains: Checks if a field contains a value.
+    -   icontains: Case-insensitive contains check.
+    -   gt: Greater than.
+    -   gte: Greater than or equal to.
+    -   lt: Less than.
+    -   lte: Less than or equal to.
+    -   in: Checks if a value is in a list or queryset.
+    -   startswith: Checks if a field starts with a value.
+    -   istartswith: Case-insensitive starts with check.
+    -   endswith: Checks if a field ends with a value.
+    -   iendswith: Case-insensitive ends with check.
+    -   range: Checks if a value is within a range.
+    -   isnull: Checks if a field is null.
+    -   regex: Performs a regular expression match.
+    -   iregex: Case-insensitive regular expression match. 
+
+-   Example:    
+    ```
+        Book.objects.filter(price__lte=100).exclude(title__startswith = 'a')
+
+        SQL:
+        select * 
+        from book 
+        where (price < 100) and title not like 'a%'; 
+    ```
+
+### objects.select_related()
 
 * It **performs a SQL JOIN** and fetches related objects **in a single query**.
 * Used for **single-valued relationships** like `ForeignKey` and `OneToOneField`.
@@ -44,6 +89,8 @@ This will generate a single SQL query with a JOIN between `book` and `author` ta
 
 * `select_related` **only works for single-object relationships**.
 * For many-to-many or reverse foreign key relationships, use `prefetch_related`, which executes **separate queries** but efficiently caches results.
+
+
 
 ---
 
